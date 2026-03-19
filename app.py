@@ -19,8 +19,9 @@ def get_data_in_db(video_id):
     with st.spinner('wait..', show_time=True):
         try:
             transcripts = yt_rag.get_video_transcript(video_id=video_id)
-        except:
+        except as e:
             st.error(body = 'Video not found\nPlease give valid video id', icon='🚨')
+            print(e)# remove this line layer its for debugging
             return False
             
         # create chunks

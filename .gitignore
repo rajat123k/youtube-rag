@@ -1,0 +1,4 @@
+.env
+Youtube_RAG.ipynb
+__pycache__/
+*.pyc

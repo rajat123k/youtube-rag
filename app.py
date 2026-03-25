@@ -26,22 +26,15 @@ def get_data_in_db(video_id):
     # get text
     with st.spinner('wait..', show_time=True):
         try:
-<<<<<<< HEAD
-            transcripts = yt_rag.get_video_transcript(video_id=video_id)
-        except Exception as e:
-            st.error(body = 'Video not found\nPlease give valid video id', icon='🚨')
-            st.write(e)# remove this line layer its for debugging
-=======
+            # old-> transcripts = yt_rag.get_video_transcript(video_id=video_id)
             title, descp, transcripts, thumbnail_url = yt_rag.transcript(video_id=video_id)
 
             # store title and thumbnail in sessino variable 'video_info'
             st.session_state['video_info'] = [title, thumbnail_url]
-
-            # old-> transcripts = yt_rag.get_video_transcript(video_id=video_id)
+            
         except Exception as e:
             st.error(body = 'Video not found\nPlease give valid video id', icon='🚨')
             st.error(e)
->>>>>>> d8d2902 (fixed -> uses another api for video info; add feature : show thumbnail and video title; also add tile and description to database)
             return False
             
 

@@ -10,18 +10,42 @@ from langchain.tools import tool
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 import os
+import requests
+
 
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 QDRANT_URL = os.getenv('QDRANT_URL')
 QDRANT_API_KEY = os.getenv('QDRANT_API_KEY')
+# for yt transcriptor rapid api
+RAPID_API_KEY = os.getenv('RAPID_API_KEY')
+RAPID_API_HOST = os.getenv('RAPID_API_HOST')
+
 
 
 def transcript(video_id, languages=['en']): # gets transcript of video
+  """
+  This method gives title, description, transcripts and thumbnail url \n
+  it accepts video_id\n
+  returns [title, description, transcripts] 
+  """
+  url = "https://youtube-transcriptor.p.rapidapi.com/transcript"
+  querystring = {"video_id":video_id,"lang":"en"}
+  headers = {
+    "x-rapidapi-key": RAPID_API_KEY,
+    "x-rapidapi-host": RAPID_API_HOST,
+    "Content-Type": "application/json"
+  }
+
+  response = requests.get(url, headers=headers, params=querystring)
+  v_info = response.json()[0]   # dictionary of video information
+  # title | description | Transcripts | thumbnail URL
+  return [v_info['title'], v_info['description'], v_info['transcriptionAsText'], v_info['thumbnails'][-1]['url']]    # response.json() -> gives list of a dictionary 
+  ''' # Transcript using YoutubeTranscriptor
   ytt_api = YouTubeTranscriptApi()
   fetched = ytt_api.fetch(video_id, languages=languages) # ytt_api.list(video id) - available transcripts
-  return fetched.to_raw_data() # list[dict]
+  return fetched.to_raw_data() # list[dict]'''
 
 def get_available_transcripts(video_id):        # gives available transripts
   ytt_api = YouTubeTranscriptApi()
